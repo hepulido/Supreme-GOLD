@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CartBtn from "./buttons/CartBtn";
 import Login from "./buttons/Login";
+import Signup from "./buttons/Signup";
 export default function Header() {
   return (
     <>
@@ -25,7 +27,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/product">
+                <Link className="nav-link" to="/products">
                   Product
                 </Link>
               </li>
@@ -40,11 +42,14 @@ export default function Header() {
                 </Link>
               </li>
             </ul>
-          </div>
-          <Link className="navbar-brand mx-auto fw-bold" to="/">
-            Supreme GOLD
+            <Link className="navbar-brand mx-auto fw-bold" to="/">
+            SupremeGOLD
           </Link>
           <Login/>
+          <Signup/>
+          <CartBtn/>
+          </div>
+         
         </div>
       </nav>
     </>
