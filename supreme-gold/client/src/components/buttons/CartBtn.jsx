@@ -7,8 +7,7 @@ export default function CartBtn() {
   return (
     <>
        <Link to="/cart" className="btn btn-outline-primary ms-2">
-       {/* state.length */}
-       <span className="fa fa-shopping-cart me-1">Cart {cartProducts.length}</span> 
+       <span className="fa fa-shopping-cart me-1">Cart({cartProducts.length})</span> 
        </Link>
     </>
   )

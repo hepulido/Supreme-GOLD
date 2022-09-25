@@ -53,7 +53,7 @@ function App() {
             path="/products/:id"
             element={<ProductDetail currentProduct={currentProduct} />}
           />
-          <Route exact path="/cart" element={<Cart />} />
+          <Route exact path="/cart" element={<Cart currentProduct={currentProduct}/>} />
           <Route exact path="/checkout" element={<Checkout />} />
           <Route exact path="/about" element={<About />} />
           <Route exact path="/contact" element={<Contact />} />

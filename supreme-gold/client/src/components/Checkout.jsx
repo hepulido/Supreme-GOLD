@@ -330,8 +330,8 @@ export default function Checkout() {
             </form>
           </div>
         </div>
-        {/* <StripeCheckout stripKey= */}
-        {/* // token={handleToken} /> */}
+        <StripeCheckout stripKey="pk_test_51Ll5J2JOYhL55ByMxw2Kx5Qs060kJbKWmDE6H0k8x4TmYo63lSgGp4MMQIklXHuTco9rOoKc4yhVYbaWvPa0znf90093Ye30K3"
+        token={handleToken} />
       </div>
     </>
   );
