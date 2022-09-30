@@ -10,12 +10,14 @@ Rails.application.routes.draw do
 
     post "/login", to: "sessions#create"
     delete "/logout", to: "sessions#destroy"
-   
+    
+    # post "/checkout", to: "checkout#create"
+    
     resources :users, only: [:create, :index, :show]
     resources :carts
     resources :products
     resources :orders
-    resources:prices
+    resources :prices
   
  
 

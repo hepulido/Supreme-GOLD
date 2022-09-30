@@ -1,9 +1,33 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CartBtn from "./buttons/CartBtn";
 import Login from "./buttons/Login";
 import Signup from "./buttons/Signup";
 export default function Header() {
+  const [user, setUser] = useState(null);
+console.log("user", user)
+
+  useEffect (() => {
+    fetch("/me").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => {
+          setUser(user)
+          })
+      } else {
+        response.json().then((err) => console.error(err))
+      }
+    })
+    
+  }, []);
+
+  const handleLogout = () => {
+    fetch("/logout", {
+      method: 'DELETE',
+    }).then((response) => {
+      if (response.ok) setUser(null)
+    })
+  }
+  
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -45,8 +69,8 @@ export default function Header() {
             <Link className="navbar-brand mx-auto fw-bold" to="/">
             <h1>SupremeGOLD</h1>
           </Link>
-          <Login/>
-          <Signup/>
+          <Login user={user} handleLogout={handleLogout}  onLogin={setUser}/>
+          <Signup onLogin={setUser}/>
           <CartBtn/>
           </div>
          

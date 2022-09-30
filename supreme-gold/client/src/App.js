@@ -17,7 +17,9 @@ function App() {
   const [products, setProducts] = useState([]);
   const [currentProduct, setCurrentProduct] = useState({});
   const [cartProducts, setCartProducts] = useState([]);
-
+  
+  
+  
   console.log("Products: ", products);
   useEffect(() => {
     fetch("/products")
@@ -26,6 +28,11 @@ function App() {
         setProducts([...productsArr]);
       });
   }, []);
+  
+  
+ 
+
+ 
   console.log("Products: ", products);
   const handleOnProduct = (product) => setCurrentProduct({ ...product });
 
@@ -33,7 +40,7 @@ function App() {
     <>
       
       <CartContext.Provider value={{ cartProducts, setCartProducts }}>
-      <Header />
+      <Header   />
         <Routes>
           <Route
             exact

@@ -1,14 +1,25 @@
 import React, { useContext } from "react";
-import StripeCheckout from "react-stripe-checkout"
+// import StripeCheckout from "react-stripe-checkout"
 // import { Link } from "react-router-dom";
+import Checkout from "./Checkout";
+import {  Element } from "@stripe/react-stripe-js"
+import { loadStripe } from "@stripe/stripe-js";
 import { CartContext } from "../CartContext";
+
+
 
 export default function Cart() {
   const { cartProducts} = useContext(CartContext);
+  
+
+  
+
   console.log("Cart products: ", cartProducts);
-  const handleToken = (token,address) => {
-    console.log({token,address});
-  }
+  // const handleToken = (token,address) => {
+  //   console.log({token,address});
+  // }
+  const PUBLIC_KEY ="pk_test_51Ll5J2JOYhL55ByMxw2Kx5Qs060kJbKWmDE6H0k8x4TmYo63lSgGp4MMQIklXHuTco9rOoKc4yhVYbaWvPa0znf90093Ye30K3"
+   const stripeTestPromise = loadStripe(PUBLIC_KEY)
   // console.log("carProduct1:",currentProduct)
 //   const handleCart = (product) => {
 //     setCartProducts([...cartProducts, product]);
@@ -59,26 +70,31 @@ export default function Cart() {
     );
   };
 
-  const checkoutButton = () => {
-    return (
-      <div className="container py-4">
-        <div className="row">
-        <StripeCheckout stripKey="pk_test_51Ll5J2JOYhL55ByMxw2Kx5Qs060kJbKWmDE6H0k8x4TmYo63lSgGp4MMQIklXHuTco9rOoKc4yhVYbaWvPa0znf90093Ye30K3"
-        token={handleToken}
-        billingAddress
-        shippingAddress
-        amount={cartItems.price.product_price * 100}
-         />
-        </div>
-      </div>
-    );
-  };
+  // const checkoutButton = () => {
+  //   return (
+  //     <div className="container py-4">
+  //       <div className="row">
+  //       <Element stripe={stripeTestPromise}>
+  //        <Checkout/>
+  //       </Element>
+  //       {/* <StripeCheckout stripKey={process.env.STRIPE_PUBLIC_KEY}
+  //       token={handleToken}
+  //       billingAddress
+  //       shippingAddress
+  //       // amount={cartItems.price.product_price * 100}
+  //        /> */}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   return (
     <>
       {cartProducts.length === 0 && emptyCart()}
       {cartProducts.length !== 0 && cartProducts.map(cartItems)}
-      {checkoutButton()}
+      <Element stripe={stripeTestPromise}>
+         <Checkout/>
+        </Element>
     </>
   );
 }
