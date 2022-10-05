@@ -1,13 +1,16 @@
-import {React, useState} from "react";
+import {React, useState, useContext } from "react";
 import { useNavigate } from 'react-router'
+import { CartContext } from "../../CartContext";
+
 export default function Signup({onLogin}) {
+  const { setUser} = useContext(CartContext);
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail]= useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [errors, setErrors] = useState([])
+  // const [errors, setErrors] = useState([])
   let navigate = useNavigate()
   
   function handleSubmit(e) {
@@ -29,10 +32,10 @@ export default function Signup({onLogin}) {
       .then((r) => {
         if(r.ok){
           r.json() 
-          .then(onLogin)
+          .then(setUser)
           .then( navigate('/'))
         }else {
-          r.json().then((err) => setErrors(err.errors))
+          r.json().then((err) => console.error(err))
         }
       })
   }
@@ -164,13 +167,13 @@ export default function Signup({onLogin}) {
                 </button>
               </form>
             </div>
-            <div>
+            {/* <div>
             {errors.map((error) => (
             <alert severity='error' variant='filled' key={error}>
               {error}
             </alert>
             ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

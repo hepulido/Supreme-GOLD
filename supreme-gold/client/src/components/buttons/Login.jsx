@@ -1,8 +1,11 @@
-import {React, useState} from "react";
-
-export default function Login({user, handleLogout, onLogin }) {
-  const [username, setUsername] = useState("");
+import {React, useState, useContext } from "react";
+import { useNavigate } from 'react-router'
+import { CartContext } from "../../CartContext";
+export default function Login({ handleLogout }) {
+  const { user, setUser} = useContext(CartContext);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  let navigate = useNavigate()
   // const [display, setDisplay] = useState(false)
   
   function handleSubmit(e) {
@@ -12,18 +15,26 @@ export default function Login({user, handleLogout, onLogin }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password}),
+      body: JSON.stringify({ email, password}),
     })
-      .then((r) => r.json())
-      .then((user) => onLogin(user));
+      .then((r) => {
+        if(r.ok){
+          r.json().then((user) => {
+          setUser(user)
+          user? navigate('/') : navigate('/cart')
+        })
+      } else {
+        r.json().then((err) => console.error(err))
+      }
+    })
   }
-  // const handleChange = () =>{
-  //   if (user) {
-  //     return <h2>Welcome, {user.username}!</h2>;
-  //   } else {
-  //     return <Login />;
-  //   }
-  // }
+  const handleChange = () =>{
+    if (user) {
+      return <h2>Welcome, {user.username}!</h2>;
+    } else {
+      return <Login />;
+    }
+  }
   return (
     // {display ? <Login handleCheckLogin={handleCheckLogin} handleLogout={handleLogout} /> : handleChange()}
     <>
@@ -64,14 +75,14 @@ export default function Login({user, handleLogout, onLogin }) {
             </button>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    Username
+                  <label htmlFor="email" className="form-label">
+                    email
                   </label>
                   <input
                    className="form-control"
                     type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     aria-describedby="emailHelp"
                   />
                   <div id="emailHelp" className="form-text">

@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(version: 2022_09_21_065252) do
     t.string "title"
     t.string "desc"
     t.string "img"
+    t.float "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "price_id"
   end
 
   create_table "users", force: :cascade do |t|

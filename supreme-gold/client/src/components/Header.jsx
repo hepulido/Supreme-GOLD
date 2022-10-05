@@ -1,32 +1,13 @@
-import { React, useState, useEffect } from "react";
+import { React, useContext } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../CartContext";
 import CartBtn from "./buttons/CartBtn";
 import Login from "./buttons/Login";
 import Signup from "./buttons/Signup";
-export default function Header() {
-  const [user, setUser] = useState(null);
-console.log("user", user)
+import MyOrderBtn from "./buttons/MyOrderBtn";
 
-  useEffect (() => {
-    fetch("/me").then((response) => {
-      if (response.ok) {
-        response.json().then((user) => {
-          setUser(user)
-          })
-      } else {
-        response.json().then((err) => console.error(err))
-      }
-    })
-    
-  }, []);
-
-  const handleLogout = () => {
-    fetch("/logout", {
-      method: 'DELETE',
-    }).then((response) => {
-      if (response.ok) setUser(null)
-    })
-  }
+export default function Header({ handleLogout }) {
+  const { user } = useContext(CartContext);
   
   return (
     <>
@@ -67,13 +48,17 @@ console.log("user", user)
               </li>
             </ul>
             <Link className="navbar-brand mx-auto fw-bold" to="/">
-            <h1>SupremeGOLD</h1>
-          </Link>
-          <Login user={user} handleLogout={handleLogout}  onLogin={setUser}/>
-          <Signup onLogin={setUser}/>
-          <CartBtn/>
+              <h1>SupremeGOLD</h1>
+            </Link>
+
+            {!user && <Login handleLogout={handleLogout} />}
+            {!user && <Signup />}
+            <CartBtn />
+            <MyOrderBtn />
+            {user && <button className="btn btn-outline-primary ms-2" onClick={handleLogout}>
+              Logout
+            </button>}
           </div>
-         
         </div>
       </nav>
     </>

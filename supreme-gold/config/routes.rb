@@ -11,8 +11,10 @@ Rails.application.routes.draw do
     post "/login", to: "sessions#create"
     delete "/logout", to: "sessions#destroy"
     
-    # post "/checkout", to: "checkout#create"
-    
+    post '/create-checkout-session', to: "checkout#create"
+    post "/carts", to: "carts#show"
+    delete "/carts", to: "carts#destroy"
+
     resources :users, only: [:create, :index, :show]
     resources :carts
     resources :products
@@ -20,6 +22,7 @@ Rails.application.routes.draw do
     resources :prices
   
  
+
 
 # get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end

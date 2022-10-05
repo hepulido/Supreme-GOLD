@@ -1,77 +1,79 @@
-import React, { useContext,  useState  } from "react";
-// import StripeCheckout from "react-stripe-checkout"
+import { React, useState, useEffect, useContext } from "react";
 import { CartContext } from "../CartContext";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
-import axios from "axios"
 
-const CARD_OPTIONS = {
-	iconStyle: "solid",
-	style: {
-		base: {
-			iconColor: "#c4f0ff",
-			color: "#fff",
-			fontWeight: 500,
-			fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
-			fontSize: "16px",
-			fontSmoothing: "antialiased",
-			":-webkit-autofill": { color: "#fce883" },
-			"::placeholder": { color: "#87bbfd" }
-		},
-		invalid: {
-			iconColor: "#ffc7ee",
-			color: "#ffc7ee"
-		}
-	}
-} 
 export default function Checkout() {
-  const { cartProducts} = useContext(CartContext);
-  const [success, setSuccess] = useState(false)
-  const stripe = useStripe()
-  const elements = useElements()
-
-  const handleSumit = async (e) => {
-    e.preventDefault()
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
-      type:"card",
-      card: elements.getElement(CardElement)
-    })
+  const { cartProducts, setCartProducts } = useContext(CartContext);
   
-  if(!error){
-    try{
-      const {id} = paymentMethod
-      const response = await axios.post("http://localhost:3000/checkout",{
-        amount: cartProducts.product_price,
-        id
+  const handleCheckout = async(e) => {
+    e.preventDefault();
+    await fetch('/create-checkout-session', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    
+      body: JSON.stringify(
+        {cartProduct: cartProducts}
+      ),
+    })
+      .then((r) => {
+        if(r.ok){
+          r.json() 
+          .then((data) => {
+            console.log(data)
+            console.log(cartProducts)
+            setCartProducts([...cartProducts])
+          })
+        }else {
+          r.json().then((err) => console.error(err))
+        }
       })
-      if(response.data.success){
-        console.log("Success payment")
-        setSuccess(true)
-      }
-    }catch(error){
-     console.log("Error", error)
-    }
-  } else {
-    console.log(error.message)
+     
   }
-}
-  return (
-    <>
-     {!success?
-     <form onSubmit={handleSumit}>
-      <fieldset className="formGroup">
-        <div className="formRow">
-          <CardElement options={CARD_OPTIONS}/>
+  
+  
+  const productDisplay = (cartItem) => (
+    <section>
+      <div className="product">
+        <img src={cartItem.img} alt={cartItem.title} height="300px" />
+        <div className="description">
+          <h3>{cartItem.title}</h3>
+          <h5>{cartItem.price}</h5>
         </div>
-      </fieldset>
-      <button className="btn-checkout">Pay</button>
-     </form>
-     :
-     <div>
-      <h2>Congrats, you purchase is completed! </h2>
-     </div>
-     }
+      </div>
+    </section>
+  );
+
+  const Message = ({ message }) => (
+    <section>
+      <p>{message}</p>
+    </section>
+  );
+
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get("success")) {
+      setMessage("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      setMessage(
+        "Order canceled -- continue to shop around and checkout when you're ready."
+      );
+    }
+  }, []);
+
+  return message ? (
+    <Message message={message} />
+  ) : (
+    <>
+      {cartProducts.map(productDisplay)}
+      {cartProducts.length > 0 &&  <form onSubmit={handleCheckout}>
+        <button type="submit">Checkout</button>
+      </form>}
     </>
   );
 }
-
-

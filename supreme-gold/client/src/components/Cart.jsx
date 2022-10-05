@@ -1,51 +1,61 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 // import StripeCheckout from "react-stripe-checkout"
 // import { Link } from "react-router-dom";
-import Checkout from "./Checkout";
-import {  Element } from "@stripe/react-stripe-js"
-import { loadStripe } from "@stripe/stripe-js";
+// import Checkout from "./Checkout";
 import { CartContext } from "../CartContext";
 
-
-
-export default function Cart() {
+export default function Cart({ handleDeleted }) {
   const { cartProducts} = useContext(CartContext);
-  
-
-  
+  const [count, setCount] = useState(1);
 
   console.log("Cart products: ", cartProducts);
+  // const handledestroy = () => {
+  //   fetch("/carts", {
+  //     method: "DELETE",
+  //   }).then((response) => {
+  //     if (response.ok) setCartProducts(null);
+  //   });
+  // };
   // const handleToken = (token,address) => {
   //   console.log({token,address});
   // }
-  const PUBLIC_KEY ="pk_test_51Ll5J2JOYhL55ByMxw2Kx5Qs060kJbKWmDE6H0k8x4TmYo63lSgGp4MMQIklXHuTco9rOoKc4yhVYbaWvPa0znf90093Ye30K3"
-   const stripeTestPromise = loadStripe(PUBLIC_KEY)
-  // console.log("carProduct1:",currentProduct)
-//   const handleCart = (product) => {
-//     setCartProducts([...cartProducts, product]);
-    
-// };
-  const cartItems = (cartItem) => {
-   return (
-      <div className="container my-5 py-3">
-       <button
-            // onclik={() => handleClose(cartItem)}
-            className="btn-close float-end"
-            aria-label="close"
-          ></button>
-        <div className="row">
-        <div className="col-md-6 d-flex justify-content-center mx-auto product">
-            <img
-              src={cartItem.img}
-              alt={cartItem.title}
-              height="300px"
-            />
+  //   // console.log("carProduct1:",currentProduct)
+  // //   const handleCart = (product) => {
+  // //     setCartProducts([...cartProducts, product]);
+
+  // // };
+  const cartItems = (cartItem,i) => {
+    return (
+      <div key={i}className="container my-5 py-3">
+        <button
+          onClick={() => {
+            handleDeleted(cartItem);
+            // handledestroy(cartItem);
+          }}
+          className="btn-close float-end"
+          aria-label="close"
+        ></button>
+       <div className="row">
+          <div className="col-md-6 d-flex justify-content-center mx-auto product">
+            <img src={cartItem.img} alt={cartItem.title} height="300px" />
           </div>
           <div className="col-md-6 d-flex flex-column justify-content-center">
             <h1 className="display-5 fw-bold">{cartItem.title}</h1>
             <hr />
             <p className="lead">{cartItem.desc}</p>
-            <h2 className="my-4">${cartItem.price.product_price}</h2>
+            <h2 className="my-4">${cartItem.price}</h2>
+            <h4><span>Quantity {(cartProducts.qty = count)} </span></h4>
+            <div className="d-grid gap-2 col-6 d-md-flex ">
+            <button className="btn btn-outline-primary btn-sm" onClick={() => setCount(count + 1)}>+</button>
+             <button className="btn btn-outline-primary btn-sm"
+               onClick={() => {
+                cartProducts.qty > 1 ? setCount(count - 1) : setCount(1);
+                }}
+            >
+                -
+             </button>
+             </div>
             {/* <button
               onClick={() => handleCart(currentProduct)}
               className="btn btn-outline-primary my-5"
@@ -74,15 +84,9 @@ export default function Cart() {
   //   return (
   //     <div className="container py-4">
   //       <div className="row">
-  //       <Element stripe={stripeTestPromise}>
-  //        <Checkout/>
-  //       </Element>
-  //       {/* <StripeCheckout stripKey={process.env.STRIPE_PUBLIC_KEY}
-  //       token={handleToken}
-  //       billingAddress
-  //       shippingAddress
-  //       // amount={cartItems.price.product_price * 100}
-  //        /> */}
+  //       <Link to="/checkout" className="btn btn-outline-primary ms-2">
+  //      <span>Checkout</span>
+  //      </Link>
   //       </div>
   //     </div>
   //   );
@@ -92,9 +96,15 @@ export default function Cart() {
     <>
       {cartProducts.length === 0 && emptyCart()}
       {cartProducts.length !== 0 && cartProducts.map(cartItems)}
-      <Element stripe={stripeTestPromise}>
-         <Checkout/>
-        </Element>
+      <div className="container py-4">
+        <div className="row">
+        <div className="d-grid col-6 d-md-flex justify-content-md-end">
+          <Link to="/checkout" className="btn btn-outline-primary btn-lg">
+            <span>Checkout</span>
+          </Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
