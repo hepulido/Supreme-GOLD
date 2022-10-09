@@ -10,14 +10,21 @@ Rails.application.routes.draw do
 
     post "/login", to: "sessions#create"
     delete "/logout", to: "sessions#destroy"
-   
+    
+    post '/create-checkout-session', to: "checkout#create"
+    get "/user-cart", to: "carts#show"
+    post "/carts", to: "carts#show"
+    
+    delete "/carts", to: "carts#destroy"
+
     resources :users, only: [:create, :index, :show]
     resources :carts
     resources :products
     resources :orders
-    resources:prices
+    resources :prices
   
  
+
 
 # get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end

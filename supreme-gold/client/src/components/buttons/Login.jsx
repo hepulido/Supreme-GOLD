@@ -1,7 +1,42 @@
-import React from "react";
-
-export default function Login() {
+import {React, useState, useContext } from "react";
+import { useNavigate } from 'react-router'
+import { CartContext } from "../../CartContext";
+export default function Login({ handleLogout }) {
+  const { user, setUser} = useContext(CartContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  let navigate = useNavigate()
+  // const [display, setDisplay] = useState(false)
+  
+  function handleSubmit(e) {
+    e.preventDefault();
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password}),
+    })
+      .then((r) => {
+        if(r.ok){
+          r.json().then((user) => {
+          setUser(user)
+          user? navigate('/') : navigate('/cart')
+        })
+      } else {
+        r.json().then((err) => console.error(err))
+      }
+    })
+  }
+  const handleChange = () =>{
+    if (user) {
+      return <h2>Welcome, {user.username}!</h2>;
+    } else {
+      return <Login />;
+    }
+  }
   return (
+    // {display ? <Login handleCheckLogin={handleCheckLogin} handleLogout={handleLogout} /> : handleChange()}
     <>
       {/* <!-- Button trigger modal --> */}
       <button
@@ -38,15 +73,16 @@ export default function Login() {
             <button className= "btn btn-outline-primary w-100 mb-4">
              <span className="fa fa-google me-2"></span> Sign in With Google 
             </button>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    Email address
+                  <label htmlFor="email" className="form-label">
+                    email
                   </label>
                   <input
-                    type="email"
-                    className="form-control"
-                    id="exampleInputEmail1"
+                   className="form-control"
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     aria-describedby="emailHelp"
                   />
                   <div id="emailHelp" className="form-text">
@@ -60,7 +96,8 @@ export default function Login() {
                   <input
                     type="password"
                     className="form-control"
-                    id="exampleInputPassword1"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className="mb-3 form-check">
@@ -74,7 +111,7 @@ export default function Login() {
                   </label>
                 </div>
                 <button type="submit" className="btn btn-outline-primary w-100">
-                  Submit
+                  Login
                 </button>
               </form>
             </div>

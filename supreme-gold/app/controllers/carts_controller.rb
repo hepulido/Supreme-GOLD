@@ -8,13 +8,13 @@ class CartsController < ApplicationController
      end
     
      def show 
-        if session.include? :cart_id
-            set_cart
+        if session[:cart_id]
+            @cart = Cart.find_by(id: session[:cart_id])
         else
-            create_cart
+           @cart =  create_cart
         end
-
-        render json: @cart
+        # byebug
+        render json: @cart, include: :user
     end
 
 
@@ -24,20 +24,26 @@ class CartsController < ApplicationController
     end
    
     def destroy
-        cart = Cart(set_cart)
-        cart.destroy
+        @cart = Cart.find(session[:cart_id])
+        @cart.destroy 
+        session[:cart_id]= null
+        render json: @cart, include: :user, status: :accepted
     end  
     
     private
 
     def set_cart
-        @cart = Cart.find_by(id: session[:cart_id])
+         Cart.find_by(id: session[:cart_id])
     end
 
     def create_cart
-        @cart = Cart.create
+        
+        puts " session #{session[:user_id]}"
+        @cart = Cart.create(user_id: session[:user_id])
         session[:cart_id] = @cart.id
-        @cart
+        puts "session cart #{session[:cart_id]}"
+        byebug
+         @cart
     end
 
     def render_not_found_response

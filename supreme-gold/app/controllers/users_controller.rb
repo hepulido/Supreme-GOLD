@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 
         if user.valid?
             session[:user_id] = user.id
-            render json: user, include: ['orders'] status: :created
+            render json: user, include: ['orders'], status: :created
         else
             render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-        params.permit(:email, :first_name, :last_name, :username, :password )
+        params.permit(:email, :first_name, :last_name, :username, :password, :password_confirmation)
     end
 
 end

@@ -1,9 +1,14 @@
-import React from "react";
+import { React, useContext } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../CartContext";
 import CartBtn from "./buttons/CartBtn";
 import Login from "./buttons/Login";
 import Signup from "./buttons/Signup";
-export default function Header() {
+import MyOrderBtn from "./buttons/MyOrderBtn";
+
+export default function Header({ handleLogout }) {
+  const { user } = useContext(CartContext);
+  
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -43,13 +48,17 @@ export default function Header() {
               </li>
             </ul>
             <Link className="navbar-brand mx-auto fw-bold" to="/">
-            <h1>SupremeGOLD</h1>
-          </Link>
-          <Login/>
-          <Signup/>
-          <CartBtn/>
+              <h1>SupremeGOLD</h1>
+            </Link>
+
+            {!user && <Login handleLogout={handleLogout} />}
+            {!user && <Signup />}
+            <CartBtn />
+            <MyOrderBtn />
+            {user && <button className="btn btn-outline-primary ms-2" onClick={handleLogout}>
+              Logout
+            </button>}
           </div>
-         
         </div>
       </nav>
     </>
