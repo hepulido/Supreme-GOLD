@@ -8,9 +8,6 @@ class CartsController < ApplicationController
      end
     
      def show 
-        # byebug
-        # if (current_user)
-        #     session[:cart_id] = current_user.cart[:id]
         if session[:cart_id]
             @cart = Cart.find_by(id: session[:cart_id])
         else

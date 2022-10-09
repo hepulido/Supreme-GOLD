@@ -12,7 +12,9 @@ Rails.application.routes.draw do
     delete "/logout", to: "sessions#destroy"
     
     post '/create-checkout-session', to: "checkout#create"
+    get "/user-cart", to: "carts#show"
     post "/carts", to: "carts#show"
+    
     delete "/carts", to: "carts#destroy"
 
     resources :users, only: [:create, :index, :show]

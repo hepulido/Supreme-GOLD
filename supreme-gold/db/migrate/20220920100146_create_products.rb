@@ -4,7 +4,8 @@ class CreateProducts < ActiveRecord::Migration[6.1]
       t.string :title
       t.string :desc
       t.string :img
-      t.float :price
+      t.integer :price
+      t.integer :likes
 
       t.timestamps
     end

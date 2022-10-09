@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import "./App.css";
 import Header from "./components/Header";
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 import Home from "./components/Home";
 import About from "./components/About";
 import Product from "./components/Product";
@@ -45,17 +45,19 @@ function App() {
   
 }, []);
 
-// const handleCheckCart = () => {
-//   fetch('/cart').then((response) => {
-//     if (response.ok) {
-//       response.json().then((cart) => {
-//         setCart(cartProducts)
-//       })
-//     } else {
-//       response.json().then((err) => console.error(err))
-//     }
-//   })
-// } 
+useEffect ((product) =>  {
+  // const newCartProducts = [...cartProducts, product]
+  // setCartProducts(newCartProducts)
+  fetch("/user-cart").then((response) => {
+    if (response.ok) {
+      response.json().then((data) => {
+        console.log(data)
+      })
+    } else {
+      response.json().then((err) => console.error(err))
+    }
+  })
+} , []);
 
 const handleLogout = () => {
   fetch("/logout", {
@@ -69,7 +71,8 @@ let addCart = (newCart) => {
   let newCartArr = [...cart, newCart]
   setCart(newCartArr)
   }
-
+  
+  
   let updateCart = (updatedCart) => {
     let updatedDogsArr = cart.map(cart => {
        if(cart.id === updatedCart.id){
@@ -86,11 +89,7 @@ let deleteProductCart = (productId) => {
   setCart(deleted)
 }
   
- 
-
- 
- 
-  const handleOnProduct = (product) => setCurrentProduct({ ...product });
+const handleOnProduct = (product) => setCurrentProduct({ ...product });
 
   return (
     <>
@@ -116,14 +115,14 @@ let deleteProductCart = (productId) => {
             path="/products/:id"
             element={<ProductDetail currentProduct={currentProduct} />}
           />
-          <Route exact path="/cart" element={<Cart currentProduct={currentProduct} handleDeleted={deleteProductCart}/>} />
+          <Route exact path="/cart" element={<Cart products={products} currentProduct={currentProduct} handleDeleted={deleteProductCart}/>} />
           <Route exact path="/MyOrders" element={<MyOrders/>} />
           <Route exact path="/checkout" element={<Checkout />} />
           <Route exact path="/about" element={<About />} />
           <Route exact path="/contact" element={<Contact />} />
         </Routes>
       </CartContext.Provider>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

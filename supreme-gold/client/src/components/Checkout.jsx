@@ -1,19 +1,29 @@
 import { React, useState, useEffect, useContext } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { CartContext } from "../CartContext";
+import CheckoutForm from "./CheckoutForm";
+
+
+const stripePromise = loadStripe("pk_test_51Ll5J2JOYhL55ByMxw2Kx5Qs060kJbKWmDE6H0k8x4TmYo63lSgGp4MMQIklXHuTco9rOoKc4yhVYbaWvPa0znf90093Ye30K3");
 
 export default function Checkout() {
-  const { cartProducts, setCartProducts } = useContext(CartContext);
+  const { cartProducts } = useContext(CartContext);
+  const [clientSecret, setClientSecret] = useState("");
+
+  const total = cartProducts.reduce(function (acc, obj) { return acc + obj.price; }, 0);
+  console.log("result ",total)
   
-  const handleCheckout = async(e) => {
-    e.preventDefault();
-    await fetch('/create-checkout-session', {
+  useEffect(() => {
+    
+  fetch('/create-checkout-session', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
     
       body: JSON.stringify(
-        {cartProduct: cartProducts}
+       {total: total}
       ),
     })
       .then((r) => {
@@ -22,14 +32,14 @@ export default function Checkout() {
           .then((data) => {
             console.log(data)
             console.log(cartProducts)
-            setCartProducts([...cartProducts])
+            setClientSecret(data.clientSecret)
           })
         }else {
           r.json().then((err) => console.error(err))
         }
       })
      
-  }
+    }, []);
   
   
   const productDisplay = (cartItem) => (
@@ -44,36 +54,28 @@ export default function Checkout() {
     </section>
   );
 
-  const Message = ({ message }) => (
-    <section>
-      <p>{message}</p>
-    </section>
-  );
+  const appearance = {
+    theme: 'stripe',
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
 
-  const [message, setMessage] = useState("");
-  useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
-
-    if (query.get("success")) {
-      setMessage("Order placed! You will receive an email confirmation.");
-    }
-
-    if (query.get("canceled")) {
-      setMessage(
-        "Order canceled -- continue to shop around and checkout when you're ready."
-      );
-    }
-  }, []);
-
-  return message ? (
-    <Message message={message} />
-  ) : (
-    <>
-      {cartProducts.map(productDisplay)}
-      {cartProducts.length > 0 &&  <form onSubmit={handleCheckout}>
-        <button type="submit">Checkout</button>
-      </form>}
-    </>
+  return (
+    <div className="App">
+    {cartProducts.map(productDisplay)}
+    <div className="justify-content">
+        {total !== 0 && <h2> Total: {total}</h2>}
+      </div>
+      {clientSecret && (
+        <Elements options={options} stripe={stripePromise}>
+          <CheckoutForm />
+        </Elements>
+      )}
+     
+    </div>
   );
 }
+
+  

@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
 
     def index
         products = Product.all
-        render json: products, include: :price, status: :ok
+        render json: products, status: :ok
     end
 
     def show

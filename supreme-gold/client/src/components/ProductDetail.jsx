@@ -56,8 +56,7 @@ export default function ProductDetail({ currentProduct }) {
           r.json() 
           .then((data) => {
             console.log(data)
-            console.log(cartProducts)
-            // setCartProducts([...cartProducts])
+            console.log([...cartProducts])
           })
            
          
@@ -67,9 +66,6 @@ export default function ProductDetail({ currentProduct }) {
       })
      
   }
-  // const handleCart = (product) => {
-  
-  // };
   
   
   return (

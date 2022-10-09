@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 // import Checkout from "./Checkout";
 import { CartContext } from "../CartContext";
 
-export default function Cart({ handleDeleted }) {
+export default function Cart({products, handleDeleted }) {
   const { cartProducts} = useContext(CartContext);
   const [count, setCount] = useState(1);
 
@@ -17,14 +17,12 @@ export default function Cart({ handleDeleted }) {
   //     if (response.ok) setCartProducts(null);
   //   });
   // };
-  // const handleToken = (token,address) => {
-  //   console.log({token,address});
-  // }
-  //   // console.log("carProduct1:",currentProduct)
   // //   const handleCart = (product) => {
   // //     setCartProducts([...cartProducts, product]);
 
-  // // };
+const newCartProducts = [...cartProducts]
+const total = cartProducts.reduce(function (acc, obj) { return acc + obj.price; }, 0);
+  console.log("result ",total) 
   const cartItems = (cartItem,i) => {
     return (
       <div key={i}className="container my-5 py-3">
@@ -55,7 +53,9 @@ export default function Cart({ handleDeleted }) {
             >
                 -
              </button>
+             
              </div>
+             
             {/* <button
               onClick={() => handleCart(currentProduct)}
               className="btn btn-outline-primary my-5"
@@ -91,15 +91,24 @@ export default function Cart({ handleDeleted }) {
   //     </div>
   //   );
   // };
-
+  
+   console.log(newCartProducts)
+  
   return (
     <>
       {cartProducts.length === 0 && emptyCart()}
       {cartProducts.length !== 0 && cartProducts.map(cartItems)}
       <div className="container py-4">
-        <div className="row">
-        <div className="d-grid col-6 d-md-flex justify-content-md-end">
-          <Link to="/checkout" className="btn btn-outline-primary btn-lg">
+      <div className="row">
+      <div className="d-lg-flex  justify-content-end">
+               {total !== 0 && <h2> Total: {total}</h2>}
+          </div>
+        </div>
+      </div>
+      <div className="container py-4">
+      <div className="row">
+      <div className="d-grid col-6 d-md-flex justify-content-md-end">
+        <Link to="/checkout" className="btn btn-outline-primary btn-lg">
             <span>Checkout</span>
           </Link>
           </div>
