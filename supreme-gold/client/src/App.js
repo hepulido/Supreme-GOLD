@@ -46,13 +46,17 @@ function App() {
   
 }, []);
 
-useEffect ((product) =>  {
-  // const newCartProducts = [...cartProducts, product]
-  // setCartProducts(newCartProducts)
+useEffect (() =>  {
   fetch("/user-cart").then((response) => {
+    console.log("response ", response)
     if (response.ok) {
-      response.json().then((data) => {
-        console.log(data)
+      response.json().then((cart) => {
+        setCart(cart)
+        if(cart.length) {
+          setCartProducts(cart);
+        } 
+     
+        console.log("data ", cart)
       })
     } else {
       response.json().then((err) => console.error(err))

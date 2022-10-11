@@ -24,7 +24,7 @@ export default function Myorders() {
                 <h1 className="display-5 fw-bold">{cartItem.title}</h1>
                 <hr />
                 <p className="lead">{cartItem.desc}</p>
-                <h2 className="my-4">${cartItem.product.price}</h2>
+                <h2 className="my-4">${cartItem.price}</h2>
                 {/* <button
                   onClick={() => handleCart(currentProduct)}
                   className="btn btn-outline-primary my-5"

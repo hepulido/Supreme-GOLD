@@ -33,7 +33,7 @@ export default function ProductDetail({ currentProduct }) {
 //   }
 
   const handlePostCart = async(product) => {
-    const newCartProducts = [...cartProducts, product]
+    const newCartProducts = [...cartProducts, {...product, qty:0 }]
     if (cartBtn === "Add to Cart") {
       setCartProducts(newCartProducts);
       setCartBtn("Remove from Cart")

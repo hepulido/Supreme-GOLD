@@ -8,12 +8,11 @@ class CartsController < ApplicationController
      end
     
      def show 
-        if session[:cart_id]
-            @cart = Cart.find_by(id: session[:cart_id])
+        if session[:user_id]
+            @cart = Cart.find_by(id: session[:user_id])
         else
            @cart =  create_cart
         end
-        # byebug
         render json: @cart, include: :user
     end
 
@@ -37,13 +36,9 @@ class CartsController < ApplicationController
     end
 
     def create_cart
-        
-        puts " session #{session[:user_id]}"
         @cart = Cart.create(user_id: session[:user_id])
         session[:cart_id] = @cart.id
-        puts "session cart #{session[:cart_id]}"
-        byebug
-         @cart
+        @cart
     end
 
     def render_not_found_response

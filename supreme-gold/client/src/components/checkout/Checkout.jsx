@@ -15,8 +15,7 @@ export default function Checkout() {
   console.log("result ",total)
   
   useEffect(() => {
-    
-  fetch('/create-checkout-session', {
+    fetch('/create-checkout-session', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

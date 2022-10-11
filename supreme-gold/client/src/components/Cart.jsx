@@ -1,30 +1,29 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Alert } from "react-bootstrap";
+import {  Alert } from "react-bootstrap";
 // import StripeCheckout from "react-stripe-checkout"
 // import { Link } from "react-router-dom";
 // import Checkout from "./Checkout";
 import { CartContext } from "../CartContext";
 
-
 export default function Cart({ products, handleDeleted }) {
-  const { cartProducts } = useContext(CartContext);
-  const [count, setCount] = useState(1);
+  const { cartProducts, setCartProducts } = useContext(CartContext);
   const { user } = useContext(CartContext);
 
-  let handleDelete = (e) => {
-    fetch(`http://localhost:9292/dogs/${id}`, {
-         method: "DELETE"
-     })
-         .then(res => res.json())
-         .then(() => handleDeleted(id))
- }
+  //   let handleDelete = (e) => {
+  //     fetch(`http://localhost:9292/dogs/${id}`, {
+  //          method: "DELETE"
+  //      })
+  //          .then(res => res.json())
+  //          .then(() => handleDeleted(id))
+  //  }
 
   const newCartProducts = [...cartProducts];
   const total = cartProducts.reduce(function (acc, obj) {
     return acc + obj.price;
   }, 0);
   console.log("result ", total);
+
   const cartItems = (cartItem, i) => {
     return (
       <div key={i} className="container my-5 py-3">
@@ -46,19 +45,33 @@ export default function Cart({ products, handleDeleted }) {
             <p className="lead">{cartItem.desc}</p>
             <h2 className="my-4">${cartItem.price}</h2>
             <h4>
-              <span>Quantity {(cartProducts.qty = count)} </span>
+              <span>Quantity: {cartItem.qty} </span>
             </h4>
             <div className="d-grid gap-2 col-6 d-md-flex ">
               <button
                 className="btn btn-outline-primary btn-sm"
-                onClick={() => setCount(count + 1)}
+                onClick={() => {
+                  setCartProducts((cart) =>
+                    cart.map((item) =>
+                      cartItem.title === item.title
+                        ? { ...item, qty: item.qty + 1 }
+                        : item
+                    )
+                  );
+                }}
               >
                 +
               </button>
               <button
                 className="btn btn-outline-primary btn-sm"
                 onClick={() => {
-                  cartProducts.qty > 1 ? setCount(count - 1) : setCount(1);
+                  setCartProducts((cart) =>
+                    cart.map((item) =>
+                      cartItem.title === item.title
+                        ? { ...item, qty: item.qty - 1 }
+                        : item
+                    )
+                  );
                 }}
               >
                 -
@@ -76,7 +89,7 @@ export default function Cart({ products, handleDeleted }) {
       </div>
     );
   };
-
+  console.log("cartProducts", cartProducts);
   const emptyCart = () => {
     return (
       <div className="px-4 my-5 bg-light rounded-3 py-5">
@@ -124,8 +137,7 @@ export default function Cart({ products, handleDeleted }) {
             ) : (
               <Alert variant="primary">
                 To continue with your purchase, please Login.
-                </Alert>
-             
+              </Alert>
             )}
           </div>
         </div>
