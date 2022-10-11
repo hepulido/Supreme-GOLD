@@ -10,7 +10,8 @@ import { Route, Routes } from "react-router-dom";
 import ProductDetail from "./components/ProductDetail";
 import Cart from "./components/Cart";
 import MyOrders from "./components/MyOrders";
-import Checkout from "./components/Checkout";
+import Checkout from "./components/checkout/Checkout";
+import PaymentComplete from "./components/checkout/PaymentComplete"
 import { CartContext } from "./CartContext";
 
 
@@ -110,6 +111,11 @@ const handleOnProduct = (product) => setCurrentProduct({ ...product });
               <Product products={products} handleOnProduct={handleOnProduct} />
             }
           />
+          <Route
+							exact
+							path="/paymentComplete"
+							element={<PaymentComplete />}
+						/>
           <Route
             exact
             path="/products/:id"

@@ -50,13 +50,12 @@ export default function Header({ handleLogout }) {
             <Link className="navbar-brand mx-auto fw-bold" to="/">
               <h1>SupremeGOLD</h1>
             </Link>
-
             {!user && <Login handleLogout={handleLogout} />}
             {!user && <Signup />}
             <CartBtn />
             <MyOrderBtn />
             {user && <button className="btn btn-outline-primary ms-2" onClick={handleLogout}>
-              Logout
+            <span className="fa fa-user-plus me-1"></span>  Logout
             </button>}
           </div>
         </div>

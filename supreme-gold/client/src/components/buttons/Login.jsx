@@ -6,7 +6,7 @@ export default function Login({ handleLogout }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate()
-  // const [display, setDisplay] = useState(false)
+  
   
   function handleSubmit(e) {
     e.preventDefault();
@@ -28,15 +28,7 @@ export default function Login({ handleLogout }) {
       }
     })
   }
-  const handleChange = () =>{
-    if (user) {
-      return <h2>Welcome, {user.username}!</h2>;
-    } else {
-      return <Login />;
-    }
-  }
   return (
-    // {display ? <Login handleCheckLogin={handleCheckLogin} handleLogout={handleLogout} /> : handleChange()}
     <>
       {/* <!-- Button trigger modal --> */}
       <button
@@ -45,7 +37,7 @@ export default function Login({ handleLogout }) {
         data-bs-toggle="modal"
         data-bs-target="#loginModal"
       >
-       <span className="fa fa-sign-in me-1"></span> Login
+       <span className="fa-solid fa-user-plus me-1"></span> Login
       </button>
 
       {/* <!-- Modal --> */}
@@ -60,7 +52,7 @@ export default function Login({ handleLogout }) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-              <span className="fa fa-sign-in me-1"></span> Login
+              <span className="fa fa-arrow-right-to-bracket me-1"></span> Login
               </h5>
               <button
                 type="button"

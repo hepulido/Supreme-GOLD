@@ -1,7 +1,7 @@
 import { React, useState, useEffect, useContext } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { CartContext } from "../CartContext";
+import { CartContext } from "../../CartContext";
 import CheckoutForm from "./CheckoutForm";
 
 
