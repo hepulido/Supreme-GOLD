@@ -13,10 +13,11 @@ Rails.application.routes.draw do
     
     post '/show-add-cart', to: "carts#show_add_cart"
     get '/current-cart', to: "carts#current"
+    patch '/carts/:id', to: "carts#update"
+    delete '/carts/:id', to: "carts#destroy"
     post '/create-checkout-session', to: "checkout#create"
-
+    
     resources :users, only: [:create, :index, :show]
-    resources :carts
     resources :products
     resources :orders
     resources :prices

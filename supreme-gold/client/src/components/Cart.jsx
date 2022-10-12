@@ -1,24 +1,60 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import {  Alert } from "react-bootstrap";
-// import StripeCheckout from "react-stripe-checkout"
-// import { Link } from "react-router-dom";
-// import Checkout from "./Checkout";
+import { Alert } from "react-bootstrap";
+
 import { CartContext } from "../CartContext";
 
 export default function Cart({ products, handleDeleted }) {
   const { cartProducts, setCartProducts } = useContext(CartContext);
   const { user } = useContext(CartContext);
 
-  //   let handleDelete = (e) => {
-  //     fetch(`http://localhost:9292/dogs/${id}`, {
-  //          method: "DELETE"
-  //      })
-  //          .then(res => res.json())
-  //          .then(() => handleDeleted(id))
-  //  }
+  let handleUpdate = async (product, id) => {
+    const newCartProducts = [...cartProducts, { ...product, qty: 0 }];
+    await fetch(`/cart/${product.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        newCartProducts,
+        product_quantity: newCartProducts.qty,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
+  let handleDelete = (product, id) => {
+    fetch(`/cart/${product.id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then(() => handleDeleted(product.id));
+  };
 
   const newCartProducts = [...cartProducts];
+  const handlePostOrder = async () => {
+    await fetch("/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({ newCartProducts }),
+    }).then((r) => {
+      if (r.ok) {
+        r.json().then((data) => {
+          console.log("data", [data]);
+          console.log([...cartProducts]);
+        });
+      } else {
+        r.json().then((err) => console.error(err));
+      }
+    });
+  };
+
   const total = cartProducts.reduce(function (acc, obj) {
     return acc + obj.price;
   }, 0);
@@ -29,7 +65,7 @@ export default function Cart({ products, handleDeleted }) {
       <div key={i} className="container my-5 py-3">
         <button
           onClick={() => {
-            handleDeleted(cartItem);
+            handleDelete(cartItem);
             // handledestroy(cartItem);
           }}
           className="btn-close float-end"
@@ -51,11 +87,13 @@ export default function Cart({ products, handleDeleted }) {
               <button
                 className="btn btn-outline-primary btn-sm"
                 onClick={() => {
-                  setCartProducts((cart) =>
-                    cart.map((item) =>
-                      cartItem.title === item.title
-                        ? { ...item, qty: item.qty + 1 }
-                        : item
+                  handleUpdate(
+                    setCartProducts((cart) =>
+                      cart.map((item) =>
+                        cartItem.title === item.title
+                          ? { ...item, qty: item.qty + 1 }
+                          : item
+                      )
                     )
                   );
                 }}
@@ -65,11 +103,13 @@ export default function Cart({ products, handleDeleted }) {
               <button
                 className="btn btn-outline-primary btn-sm"
                 onClick={() => {
-                  setCartProducts((cart) =>
-                    cart.map((item) =>
-                      cartItem.title === item.title
-                        ? { ...item, qty: item.qty - 1 }
-                        : item
+                  handleUpdate(
+                    setCartProducts((cart) =>
+                      cart.map((item) =>
+                        cartItem.title === item.title
+                          ? { ...item, qty: item.qty - 1 }
+                          : item
+                      )
                     )
                   );
                 }}
@@ -102,18 +142,6 @@ export default function Cart({ products, handleDeleted }) {
     );
   };
 
-  // const checkoutButton = () => {
-  //   return (
-  //     <div className="container py-4">
-  //       <div className="row">
-  //       <Link to="/checkout" className="btn btn-outline-primary ms-2">
-  //      <span>Checkout</span>
-  //      </Link>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
   console.log(newCartProducts);
 
   return (
@@ -131,7 +159,14 @@ export default function Cart({ products, handleDeleted }) {
         <div className="row">
           <div className="d-grid col-6 d-md-flex justify-content-md-end">
             {user ? (
-              <Link to="/checkout" className="btn btn-outline-primary btn-lg">
+              <Link
+                onClick={() => {
+                  // handleCart(currentProduct)
+                  handlePostOrder();
+                }}
+                to="/checkout"
+                className="btn btn-outline-primary btn-lg"
+              >
                 <span>Checkout</span>
               </Link>
             ) : (

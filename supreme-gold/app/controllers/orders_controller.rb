@@ -14,8 +14,8 @@ class OrdersController < ApplicationController
      end
 
      def create 
-        orders  = Order.create(create_order_params)
-        render json: orders, include: ['product','cart'], status: :created
+        orders  = Order.create(user_id: session[:user_id])
+        render json: orders,  include: :user
      end
     
      def update 

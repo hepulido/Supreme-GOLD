@@ -1,81 +1,46 @@
 import React, { useContext } from "react";
-// import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { CartContext } from "../CartContext";
 
 export default function ProductDetail({ currentProduct }) {
   const [cartBtn, setCartBtn] = useState("Add to Cart");
   const { cartProducts, setCartProducts } = useContext(CartContext);
-  
-  
 
- 
-    useEffect(() => {
-  console.log("setCartProducts",cartProducts)
-    })
+  useEffect(() => {
+    console.log("setCartProducts", cartProducts);
+  });
 
-//   const handleClick = async (e, product) =>{
-//     let response = await fetch("/carts", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-    
-//       body: JSON.stringify(
-//         {product_id: cartProducts}
-//       ),
-//     }).then(r=>r.json())
-
-//     setCartProducts(response)
-// // get the info
-// // await post the info
-// // with post result, set state
-//   }
-// const total = cartProducts.reduce(function (acc, obj) {
-//   return acc + obj.price;
-// }, 0);
-  const handlePostCart = async(product) => {
-    const newCartProducts = [...cartProducts, {...product, qty:0 }]
-    console.log("newCartProducts ",newCartProducts)
+  const handlePostCart = async (product) => {
+    const newCartProducts = [...cartProducts, { ...product, qty: 0 }];
+    console.log("newCartProducts ", newCartProducts);
     if (cartBtn === "Add to Cart") {
       setCartProducts(newCartProducts);
-      setCartBtn("Remove from Cart")
-    } else{
+      setCartBtn("Remove from Cart");
+    } else {
       setCartBtn("Add to Cart");
     }
-      
+
     await fetch("/show-add-cart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-    
-      body: JSON.stringify(
-        {
-        newCartProducts
-          
-        }
-      ),
 
-    })
-      .then((r) => {
-        if(r.ok){
-          r.json() 
-          .then((data) => {
-            console.log("data", [data])
-            console.log([...cartProducts])
-            
-          })
-           
-         
-        }else {
-          r.json().then((err) => console.error(err))
-        }
-      })
-     
-  }
-  
-  
+      body: JSON.stringify({
+        newCartProducts,
+      }),
+    }).then((r) => {
+      if (r.ok) {
+        r.json().then((data) => {
+          console.log("data", [data]);
+          console.log([...cartProducts]);
+        });
+      } else {
+        r.json().then((err) => console.error(err));
+      }
+    });
+  };
+
   return (
     <>
       <div className="container my-5 py-3">
@@ -94,14 +59,13 @@ export default function ProductDetail({ currentProduct }) {
             <h2 className="my-4">${currentProduct.price}</h2>
             <button
               onClick={() => {
-              // handleCart(currentProduct)
-              handlePostCart(currentProduct)
-              }
-              }
+                // handleCart(currentProduct)
+                handlePostCart(currentProduct);
+              }}
               className="btn btn-outline-primary my-5"
             >
               {cartBtn}
-              </button>
+            </button>
           </div>
         </div>
       </div>

@@ -50,8 +50,10 @@ class CartsController < ApplicationController
 
 
     def update
-        @cart.update(set_cart)
+        @cart = Cart.find(session[:cart_id])
+        @cart.update(qty: params[:qty])
         render json: @cart, status: :accepted
+        
     end
    
     def destroy
