@@ -31,9 +31,12 @@ export default function ProductDetail({ currentProduct }) {
 // // await post the info
 // // with post result, set state
 //   }
-
+// const total = cartProducts.reduce(function (acc, obj) {
+//   return acc + obj.price;
+// }, 0);
   const handlePostCart = async(product) => {
     const newCartProducts = [...cartProducts, {...product, qty:0 }]
+    console.log("newCartProducts ",newCartProducts)
     if (cartBtn === "Add to Cart") {
       setCartProducts(newCartProducts);
       setCartBtn("Remove from Cart")
@@ -41,22 +44,27 @@ export default function ProductDetail({ currentProduct }) {
       setCartBtn("Add to Cart");
     }
       
-    await fetch("/carts", {
+    await fetch("/show-add-cart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
     
       body: JSON.stringify(
-        { newCartProducts}
+        {
+        newCartProducts
+          
+        }
       ),
+
     })
       .then((r) => {
         if(r.ok){
           r.json() 
           .then((data) => {
-            console.log(data)
+            console.log("data", [data])
             console.log([...cartProducts])
+            
           })
            
          

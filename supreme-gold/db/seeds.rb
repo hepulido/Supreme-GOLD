@@ -29,7 +29,7 @@ User.destroy_all
 # Product.create(title:"White gold 18K", desc: "Code in object-oriented programming is organized around objects.", img: "https://e7.pngegg.com/pngimages/231/285/png-clipart-jewelry-jewelry-thumbnail.png")
 # Product.create(title:"White gold 18K", desc: "Code in object-oriented programming is organized around objects.", img: "https://e7.pngegg.com/pngimages/231/285/png-clipart-jewelry-jewelry-thumbnail.png")
 
-
+# User.create(first_name:"hector",last_name:"pulido",username:" hepu",email:"he@gmail.com", password: "12345") 
 products =[
 {
     title:"The Keiki Top Open Ring",

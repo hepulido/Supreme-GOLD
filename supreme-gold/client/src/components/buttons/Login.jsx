@@ -2,7 +2,7 @@ import {React, useState, useContext } from "react";
 import { useNavigate } from 'react-router'
 import { CartContext } from "../../CartContext";
 export default function Login({ handleLogout }) {
-  const { user, setUser} = useContext(CartContext);
+  const {setUser} = useContext(CartContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate()

@@ -11,11 +11,9 @@ Rails.application.routes.draw do
     post "/login", to: "sessions#create"
     delete "/logout", to: "sessions#destroy"
     
+    post '/show-add-cart', to: "carts#show_add_cart"
+    get '/current-cart', to: "carts#current"
     post '/create-checkout-session', to: "checkout#create"
-    get "/user-cart", to: "carts#show"
-    post "/carts", to: "carts#show"
-    
-    delete "/carts", to: "carts#destroy"
 
     resources :users, only: [:create, :index, :show]
     resources :carts

@@ -45,25 +45,24 @@ function App() {
   })
   
 }, []);
-
+console.log("user", user)
 useEffect (() =>  {
-  fetch("/user-cart").then((response) => {
+  fetch("/current-cart").then((response) => {
     console.log("response ", response)
     if (response.ok) {
       response.json().then((cart) => {
+        console.log("data ", cart)
         setCart(cart)
         if(cart.length) {
           setCartProducts(cart);
         } 
-     
-        console.log("data ", cart)
-      })
+        })
     } else {
       response.json().then((err) => console.error(err))
     }
   })
 } , []);
-
+ console.log("data ", cart)
 const handleLogout = () => {
   fetch("/logout", {
     method: 'DELETE',
@@ -95,6 +94,7 @@ let deleteProductCart = (productId) => {
 }
   
 const handleOnProduct = (product) => setCurrentProduct({ ...product });
+
 
   return (
     <>
