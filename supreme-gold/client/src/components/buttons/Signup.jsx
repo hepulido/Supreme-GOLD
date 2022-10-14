@@ -1,6 +1,7 @@
 import {React, useState, useContext } from "react";
 import { useNavigate } from 'react-router'
 import { CartContext } from "../../CartContext";
+import { Alert } from "react-bootstrap";
 
 export default function Signup({onLogin}) {
   const { setUser} = useContext(CartContext);
@@ -10,7 +11,7 @@ export default function Signup({onLogin}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  // const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState([])
   let navigate = useNavigate()
   
   function handleSubmit(e) {
@@ -35,7 +36,7 @@ export default function Signup({onLogin}) {
           .then(setUser)
           .then( navigate('/'))
         }else {
-          r.json().then((err) => console.error(err))
+          r.json().then((err) => setErrors(err.errors))
         }
       })
   }
@@ -167,13 +168,13 @@ export default function Signup({onLogin}) {
                 </button>
               </form>
             </div>
-            {/* <div>
+            <div>
             {errors.map((error) => (
-            <alert severity='error' variant='filled' key={error}>
-              {error}
-            </alert>
+              <Alert variant="primary" key={error}>
+               {error}
+              </Alert>
             ))}
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

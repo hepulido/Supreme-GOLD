@@ -1,10 +1,12 @@
 import {React, useState, useContext } from "react";
 import { useNavigate } from 'react-router'
 import { CartContext } from "../../CartContext";
+import { Alert } from "react-bootstrap";
 export default function Login({ handleLogout }) {
   const {setUser} = useContext(CartContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([])
   let navigate = useNavigate()
   
   
@@ -24,7 +26,7 @@ export default function Login({ handleLogout }) {
           user? navigate('/') : navigate('/cart')
         })
       } else {
-        r.json().then((err) => console.error(err))
+        r.json().then((err) => setErrors(err.errors))
       }
     })
   }
@@ -106,6 +108,13 @@ export default function Login({ handleLogout }) {
                   Login
                 </button>
               </form>
+            </div>
+            <div>
+            {errors.map((error) => (
+              <Alert variant="primary" key={error}>
+               {error}
+              </Alert>
+            ))}
             </div>
           </div>
         </div>

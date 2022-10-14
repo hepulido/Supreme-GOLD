@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     post "/login", to: "sessions#create"
     delete "/logout", to: "sessions#destroy"
     
-    post '/show-add-cart', to: "carts#show_add_cart"
+    post '/show-add-cart', to: "carts#create"
     get '/current-cart', to: "carts#current"
     patch '/carts/:id', to: "carts#update"
     delete '/carts/:id', to: "carts#destroy"

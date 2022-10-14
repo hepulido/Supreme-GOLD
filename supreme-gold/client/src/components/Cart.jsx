@@ -27,7 +27,7 @@ export default function Cart({ products, handleDeleted }) {
   };
 
   let handleDelete = (product, id) => {
-    fetch(`/cart/${product.id}`, {
+    fetch(`/cart/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -58,6 +58,11 @@ export default function Cart({ products, handleDeleted }) {
   const total = cartProducts.reduce(function (acc, obj) {
     return acc + obj.price;
   }, 0);
+  // ar.splice(0, ar.length);
+  const removeCart = () =>{
+    newCartProducts.splice(0, newCartProducts.length)
+  } 
+  
   console.log("result ", total);
 
   const cartItems = (cartItem, i) => {
@@ -146,8 +151,23 @@ export default function Cart({ products, handleDeleted }) {
 
   return (
     <>
+     <div className="container ">
+        <div className="d-lg-flex  justify-content-end">
+          {cartProducts.length !== 0 &&
+          <button onClick={() => {
+                  removeCart();
+                }} 
+                className="btn btn-outline-primary my-5 "
+            
+            >
+              Delete All The Products On Cart
+            </button>
+          }
+          </div>
+        </div>
       {cartProducts.length === 0 && emptyCart()}
       {cartProducts.length !== 0 && cartProducts.map(cartItems)}
+      
       <div className="container py-4">
         <div className="row">
           <div className="d-lg-flex  justify-content-end">
