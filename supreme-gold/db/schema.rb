@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2022_10_12_000237) do
   create_table "cart_products", force: :cascade do |t|
     t.integer "cart_id"
     t.integer "product_id"
+    t.integer "qty", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -25,7 +26,7 @@ ActiveRecord::Schema.define(version: 2022_10_12_000237) do
   create_table "carts", force: :cascade do |t|
     t.integer "user_id"
     t.integer "total_amount"
-    t.integer "quantity_products"
+    t.integer "qty", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -52,6 +53,7 @@ ActiveRecord::Schema.define(version: 2022_10_12_000237) do
     t.string "img"
     t.integer "price"
     t.integer "likes"
+    t.integer "qty"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

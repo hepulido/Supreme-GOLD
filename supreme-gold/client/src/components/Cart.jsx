@@ -7,17 +7,22 @@ import { CartContext } from "../CartContext";
 export default function Cart({ products, handleDeleted }) {
   const { cartProducts, setCartProducts } = useContext(CartContext);
   const { user } = useContext(CartContext);
-
-  let handleUpdate = async (product, id) => {
-    const newCartProducts = [...cartProducts, { ...product, qty: 0 }];
-    await fetch(`/cart/${product.id}`, {
+  let {id, qty} = products;
+  
+  let handleUpdate = async (product) => {
+    const newCartProducts = cartProducts.map((item) => {
+      return item.id === product.id ? product : item
+    })
+    setCartProducts(newCartProducts)
+    // debugger
+    await fetch(`/carts/${id}`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
         newCartProducts,
-        product_quantity: newCartProducts.qty,
+        qty: qty
       }),
     })
       .then((res) => res.json())
@@ -26,12 +31,40 @@ export default function Cart({ products, handleDeleted }) {
       });
   };
 
-  let handleDelete = (product, id) => {
-    fetch(`/cart/${id}`, {
+  let handleDeleteProduct = async (product) => {
+    let deleteProductCart = cartProducts.filter((productId) => {
+      return product.id !== productId
+    })
+    console.log("destroy ",deleteProductCart)
+      setCartProducts(deleteProductCart)
+      await fetch(`/carts/${id}/delete_product`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        newCartProducts,
+       
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
+  // let deleteProductCart = (productId) => {
+  //   cartProducts.filter((product) => product.id !== productId);
+    
+  // };
+
+  let handleDelete = (products) => {
+    products.splice(0, products.length)
+    fetch(`/carts/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
-      .then(() => handleDeleted(product.id));
+      .then(() => handleDeleted(products));
   };
 
   const newCartProducts = [...cartProducts];
@@ -54,14 +87,12 @@ export default function Cart({ products, handleDeleted }) {
       }
     });
   };
-
+ 
   const total = cartProducts.reduce(function (acc, obj) {
     return acc + obj.price;
   }, 0);
   // ar.splice(0, ar.length);
-  const removeCart = () =>{
-    newCartProducts.splice(0, newCartProducts.length)
-  } 
+  
   
   console.log("result ", total);
 
@@ -70,9 +101,8 @@ export default function Cart({ products, handleDeleted }) {
       <div key={i} className="container my-5 py-3">
         <button
           onClick={() => {
-            handleDelete(cartItem);
-            // handledestroy(cartItem);
-          }}
+            handleDeleteProduct(cartItem);
+            }}
           className="btn-close float-end"
           aria-label="close"
         ></button>
@@ -92,15 +122,8 @@ export default function Cart({ products, handleDeleted }) {
               <button
                 className="btn btn-outline-primary btn-sm"
                 onClick={() => {
-                  handleUpdate(
-                    setCartProducts((cart) =>
-                      cart.map((item) =>
-                        cartItem.title === item.title
-                          ? { ...item, qty: item.qty + 1 }
-                          : item
-                      )
-                    )
-                  );
+                  cartItem.qty++
+                  handleUpdate(cartItem);
                 }}
               >
                 +
@@ -108,16 +131,11 @@ export default function Cart({ products, handleDeleted }) {
               <button
                 className="btn btn-outline-primary btn-sm"
                 onClick={() => {
-                  handleUpdate(
-                    setCartProducts((cart) =>
-                      cart.map((item) =>
-                        cartItem.title === item.title
-                          ? { ...item, qty: item.qty - 1 }
-                          : item
-                      )
-                    )
-                  );
-                }}
+                  if (cartItem.qty > 0){
+                    cartItem.qty--
+                    handleUpdate(cartItem ) 
+                  }
+                 }}
               >
                 -
               </button>
@@ -155,7 +173,7 @@ export default function Cart({ products, handleDeleted }) {
         <div className="d-lg-flex  justify-content-end">
           {cartProducts.length !== 0 &&
           <button onClick={() => {
-                  removeCart();
+                 handleDelete(cartProducts);
                 }} 
                 className="btn btn-outline-primary my-5 "
             

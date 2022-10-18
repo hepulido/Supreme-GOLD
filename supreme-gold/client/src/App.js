@@ -45,13 +45,11 @@ function App() {
   useEffect(() => {
     fetch("/current-cart").then((response) => {
       console.log("response ", response);
-      if (response.ok) {
-        response.json().then((cart) => {
-          console.log("data ", cart);
-          if (cart.length) {
-            setCartProducts(cart);
-          }
-        });
+        if (response.ok) {
+          response.json().then((cart) => {
+            setCartProducts(cart)
+          })
+       
       } else {
         response.json().then((err) => console.error(err));
       }

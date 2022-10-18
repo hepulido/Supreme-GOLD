@@ -9,15 +9,9 @@ export default function About() {
           <div className="col-md-6">
             <h1 className="text-primary fw-bold mb-4">About Us</h1>
             <p className="lead mb-4">
-              Code in object-oriented programming is organized around objects.
-              Once you have your objects, they can interact with each other to
-              make something happen. Let's say you want to have a program where
-              a person gets into a car and drives it from A to B. You would
-              start by describing the objects, such as a person and car. That
-              includes methods: a person knows how to drive a car, and a car
-              knows what it is like to be driven. Once you have your objects,
-              you bring them together so the person can get into the car and
-              drive.
+            Our work is above all joyful.
+            We do what we love, and we love what we do.
+            Our pieces help mark new chapters, close old ones, remind us of our roots, and launch new lifetimes..
             </p>
             <Link to="/contact" className="btn btn-outline-primary px-3">
               Contact Us

@@ -28,11 +28,11 @@ class CartsController < ApplicationController
         @cart
     end
 
-    def current
+    def show
         @cart = Cart.find(session[:cart_id])
-        byebug
+        # byebug
         if @cart 
-        render json: @cart.products, include:[:qty]
+        render json: @cart.products
         else
             render json: []
             
@@ -51,19 +51,25 @@ class CartsController < ApplicationController
 
 
     def update
-        @cart = Cart.find(session[:cart_id])
-        @cart.update(qty: params[:qty])
-        render json: @cart, status: :accepted
+        # byebug
+       
+        @cart = Cart.find_by(params[:product_id])
+        # byebug
+        @cart.update(cart_params)
         
+        render json: @cart, status: :accepted
     end
 
-
+   def delete_product 
+    @cart = Cart.find_by(params[:product_id])
+    @cart.destroy
+    render json: @cart, status: :accepted
+   end
     # product = Product.find_by(product_id: params[:id])
    
     def destroy
-        # @cart = Cart.find(current)
-      
-        current.destroy 
+        @cart = Cart.find_by_id(session[:cart_id])
+        @cart.destroy 
         # @cart.destroy
         session[:cart_id]= nil
         render json: @cart, include: :user, status: :accepted
@@ -81,8 +87,12 @@ class CartsController < ApplicationController
         session[:cart_id] = @cart.id
         @cart
     end
-
-    def render_not_found_response
+    
+    def cart_params
+    params.permit(:qty, :id, :cart, :newCartProducts, products:[:id,:title,:desc,:img,:price,:qty])
+     end
+    
+     def render_not_found_response
         render json: { errors: ['No Cart Found'] }, status: :not_found
     end
 end

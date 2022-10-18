@@ -10,8 +10,8 @@ export default function ProductDetail({ currentProduct }) {
     console.log("setCartProducts", cartProducts);
   });
 
-  const handlePostCart = async (product, qty) => {
-    const newCartProducts = [...cartProducts, { ...product, qty: 0 }];
+  const handlePostCart = async (product) => {
+    const newCartProducts = [...cartProducts, product];
     console.log("newCartProducts ", newCartProducts);
     if (cartBtn === "Add to Cart") {
       setCartProducts(newCartProducts);
@@ -28,7 +28,8 @@ export default function ProductDetail({ currentProduct }) {
 
       body: JSON.stringify({
         newCartProducts,
-        quantity_products: qty 
+
+        // quantity_products: qty 
       }),
     }).then((r) => {
       if (r.ok) {
