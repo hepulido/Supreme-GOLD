@@ -15,7 +15,6 @@ class SessionsController < ApplicationController
 
     def destroy 
         session.delete :user_id 
-        session.delete :cart_id 
         head :no_content
     end
 

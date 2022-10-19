@@ -9,9 +9,11 @@ export default function About() {
           <div className="col-md-6">
             <h1 className="text-primary fw-bold mb-4">About Us</h1>
             <p className="lead mb-4">
-            Our work is above all joyful.
-            We do what we love, and we love what we do.
-            Our pieces help mark new chapters, close old ones, remind us of our roots, and launch new lifetimes..
+                Our work is above all joyful.
+                We do what we love, and we love what we do.
+                Our pieces help mark new chapters, close old ones, remind us of our roots, and launch new lifetimes..
+                <br />
+                We are a store located in Miami Florida, we have many years of experience in the market, this company was created based on a flatiron school project and ended up being a reality.
             </p>
             <Link to="/contact" className="btn btn-outline-primary px-3">
               Contact Us

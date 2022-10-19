@@ -14,7 +14,6 @@ export default function Cart({ products, handleDeleted }) {
       return item.id === product.id ? product : item
     })
     setCartProducts(newCartProducts)
-    // debugger
     await fetch(`/carts/${id}`, {
       method: "PATCH",
       headers: {
@@ -26,37 +25,29 @@ export default function Cart({ products, handleDeleted }) {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
+     
   };
 
   let handleDeleteProduct = async (product) => {
-    let deleteProductCart = cartProducts.filter((productId) => {
-      return product.id !== productId
+    const newCartProducts = cartProducts.filter((item) => {
+      return item.id !== product.id;
     })
-    console.log("destroy ",deleteProductCart)
-      setCartProducts(deleteProductCart)
       await fetch(`/carts/${id}/delete_product`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        newCartProducts,
+       newCartProducts,
        
       }),
+      
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
+    setCartProducts(newCartProducts)
+      
   };
 
-  // let deleteProductCart = (productId) => {
-  //   cartProducts.filter((product) => product.id !== productId);
-    
-  // };
+
 
   let handleDelete = (products) => {
     products.splice(0, products.length)
@@ -78,10 +69,7 @@ export default function Cart({ products, handleDeleted }) {
       body: JSON.stringify({ newCartProducts }),
     }).then((r) => {
       if (r.ok) {
-        r.json().then((data) => {
-          console.log("data", [data]);
-          console.log([...cartProducts]);
-        });
+        setCartProducts(newCartProducts)
       } else {
         r.json().then((err) => console.error(err));
       }
@@ -91,17 +79,13 @@ export default function Cart({ products, handleDeleted }) {
   const total = cartProducts.reduce(function (acc, obj) {
     return acc + obj.price;
   }, 0);
-  // ar.splice(0, ar.length);
-  
-  
-  console.log("result ", total);
 
   const cartItems = (cartItem, i) => {
     return (
       <div key={i} className="container my-5 py-3">
         <button
           onClick={() => {
-            handleDeleteProduct(cartItem);
+           handleDeleteProduct(cartItem);
             }}
           className="btn-close float-end"
           aria-label="close"
@@ -140,19 +124,12 @@ export default function Cart({ products, handleDeleted }) {
                 -
               </button>
             </div>
-
-            {/* <button
-              onClick={() => handleCart(currentProduct)}
-              className="btn btn-outline-primary my-5"
-            >
-              {cartBtn}
-              </button> */}
           </div>
         </div>
       </div>
     );
   };
-  console.log("cartProducts", cartProducts);
+ 
   const emptyCart = () => {
     return (
       <div className="px-4 my-5 bg-light rounded-3 py-5">
@@ -165,7 +142,7 @@ export default function Cart({ products, handleDeleted }) {
     );
   };
 
-  console.log(newCartProducts);
+  
 
   return (
     <>
@@ -176,8 +153,7 @@ export default function Cart({ products, handleDeleted }) {
                  handleDelete(cartProducts);
                 }} 
                 className="btn btn-outline-primary my-5 "
-            
-            >
+              >
               Delete All The Products On Cart
             </button>
           }

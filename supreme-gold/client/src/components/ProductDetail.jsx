@@ -1,18 +1,13 @@
 import React, { useContext } from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CartContext } from "../CartContext";
 
 export default function ProductDetail({ currentProduct }) {
   const [cartBtn, setCartBtn] = useState("Add to Cart");
   const { cartProducts, setCartProducts } = useContext(CartContext);
 
-  useEffect(() => {
-    console.log("setCartProducts", cartProducts);
-  });
-
   const handlePostCart = async (product) => {
     const newCartProducts = [...cartProducts, product];
-    console.log("newCartProducts ", newCartProducts);
     if (cartBtn === "Add to Cart") {
       setCartProducts(newCartProducts);
       setCartBtn("Remove from Cart");
@@ -28,15 +23,10 @@ export default function ProductDetail({ currentProduct }) {
 
       body: JSON.stringify({
         newCartProducts,
-
-        // quantity_products: qty 
       }),
     }).then((r) => {
       if (r.ok) {
-        r.json().then((data) => {
-          console.log("data", [data]);
-          console.log([...cartProducts]);
-        });
+        setCartProducts(newCartProducts)
       } else {
         r.json().then((err) => console.error(err));
       }
@@ -61,7 +51,6 @@ export default function ProductDetail({ currentProduct }) {
             <h2 className="my-4">${currentProduct.price}</h2>
             <button
               onClick={() => {
-                // handleCart(currentProduct)
                 handlePostCart(currentProduct);
               }}
               className="btn btn-outline-primary my-5"

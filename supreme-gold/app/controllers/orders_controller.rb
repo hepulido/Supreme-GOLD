@@ -17,16 +17,7 @@ class OrdersController < ApplicationController
         orders  = Order.create(user_id: session[:user_id])
         render json: orders,  include: :user
      end
-    
-     def update 
-        @order.update(set_order)
-        render json: @order, include: ['product','cart' ], status: :accepted
-    end
 
-    def destroy
-        @order.destroy(set_order)
-     end
-    
     private 
 
     def set_order
@@ -35,11 +26,6 @@ class OrdersController < ApplicationController
 
     def create_order_params
         params.permit(:total, :quantity_products)
-    end
-   
-
-    def order_params
-        params.permit(:status)
     end
 
     def render_not_found_response

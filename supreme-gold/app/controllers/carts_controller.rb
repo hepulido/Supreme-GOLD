@@ -9,12 +9,6 @@ class CartsController < ApplicationController
         render json: carts
      end
     
-    #  def create
-    #     @cart = Cart.create(user_id: session[:user_id])
-    #     session[:cart_id] = @cart.id
-    #     render json: @cart, include: :user
-    # end
-    
     def set_current_user
         @user = User.find_by_id(session[:user_id])
     end
@@ -30,7 +24,6 @@ class CartsController < ApplicationController
 
     def show
         @cart = Cart.find(session[:cart_id])
-        # byebug
         if @cart 
         render json: @cart.products
         else
@@ -40,23 +33,16 @@ class CartsController < ApplicationController
         
     end
 
-     def create  
-    products = params[:newCartProducts].map {|p|  Product.find(p[:id])}
-    products.each {|p| @cart.products << p}
-    
-    # Product.find(params[:newCartProducts][0][:id])
-    #     end
+    def create  
+        products = params[:newCartProducts].map {|p|  Product.find(p[:id])}
+        products.each {|p| @cart.products << p}
         render json: @cart.products
     end
 
 
     def update
-        # byebug
-       
         @cart = Cart.find_by(params[:product_id])
-        # byebug
         @cart.update(cart_params)
-        
         render json: @cart, status: :accepted
     end
 
@@ -65,12 +51,11 @@ class CartsController < ApplicationController
     @cart.destroy
     render json: @cart, status: :accepted
    end
-    # product = Product.find_by(product_id: params[:id])
+    
    
     def destroy
         @cart = Cart.find_by_id(session[:cart_id])
         @cart.destroy 
-        # @cart.destroy
         session[:cart_id]= nil
         render json: @cart, include: :user, status: :accepted
       

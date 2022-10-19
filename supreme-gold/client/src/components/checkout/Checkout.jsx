@@ -12,7 +12,6 @@ export default function Checkout() {
   const [clientSecret, setClientSecret] = useState("");
 
   const total = cartProducts.reduce(function (acc, obj) { return acc + obj.price; }, 0);
-  console.log("result ",total)
   
   useEffect(() => {
     fetch('/create-checkout-session', {
@@ -29,8 +28,6 @@ export default function Checkout() {
         if(r.ok){
           r.json() 
           .then((data) => {
-            console.log(data)
-            console.log(cartProducts)
             setClientSecret(data.clientSecret)
           })
         }else {
@@ -41,9 +38,9 @@ export default function Checkout() {
     }, []);
   
   
-  const productDisplay = (cartItem) => (
+  const productDisplay = (cartItem,i) => (
     <section>
-      <div className="product">
+      <div key={i} className="product">
         <img src={cartItem.img} alt={cartItem.title} height="300px" />
         <div className="description">
           <h3>{cartItem.title}</h3>

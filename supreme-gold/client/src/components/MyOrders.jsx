@@ -4,9 +4,9 @@ import { CartContext } from "../CartContext";
 export default function Myorders() {
     const { cartProducts} = useContext(CartContext);
    
-      const cartItems = (cartItem) => {
+      const cartItems = (cartItem,i) => {
        return (
-          <div className="container my-5 py-3">
+          <div key={i} className="container my-5 py-3">
            <button
                 // onclik={() => handleClose(cartItem)}
                 className="btn-close float-end"
@@ -25,12 +25,6 @@ export default function Myorders() {
                 <hr />
                 <p className="lead">{cartItem.desc}</p>
                 <h2 className="my-4">${cartItem.price}</h2>
-                {/* <button
-                  onClick={() => handleCart(currentProduct)}
-                  className="btn btn-outline-primary my-5"
-                >
-                  {cartBtn}
-                  </button> */}
               </div>
             </div>
           </div>

@@ -21,7 +21,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
 
-  console.log("Products: ", products);
+ 
   useEffect(() => {
     fetch("/products")
       .then((res) => res.json())
@@ -41,43 +41,25 @@ function App() {
       }
     });
   }, []);
-  console.log("user", user);
+
   useEffect(() => {
     fetch("/current-cart").then((response) => {
-      console.log("response ", response);
-        if (response.ok) {
-          response.json().then((cart) => {
-            setCartProducts(cart)
-          })
-       
+      if (response.ok) {
+        response.json().then((cart) => {
+          setCartProducts(cart);
+        });
       } else {
         response.json().then((err) => console.error(err));
       }
     });
   }, []);
-  console.log("data ", cart);
+  
   const handleLogout = () => {
     fetch("/logout", {
       method: "DELETE",
     }).then((response) => {
       if (response.ok) setUser(null);
     });
-  };
-
-  let addCart = (newCart) => {
-    let newCartArr = [...cart, newCart];
-    setCart(newCartArr);
-  };
-
-  let updateCart = (updatedCart) => {
-    let updatedDogsArr = cart.map((cart) => {
-      if (cart.id === updatedCart.id) {
-        return updateCart;
-      } else {
-        return Cart;
-      }
-    });
-    setCart(updatedDogsArr);
   };
 
   let deleteProductCart = (productId) => {
